@@ -64,8 +64,8 @@ def restart_deployment(deployment_name):
     deployment = k8s_client.read_namespaced_deployment(deployment_name,os.environ.get("X_NAMESPACE"))
 
     # Increment the deployment's revision to trigger a rollout restart
-    deployment.spec.template.metadata.annotations['kubectl.kubernetes.io/restartedAt'] = str(datetime.utcnow())
-    deployment.spec.template.metadata.labels['date'] = str(datetime.utcnow())
+    deployment.spec.template.metadata.annotations['kubectl.kubernetes.io/restartedAt'] = datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')
+    deployment.spec.template.metadata.labels['date'] = datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')
 
     # Update the deployment
     k8s_client.patch_namespaced_deployment(
