@@ -71,7 +71,8 @@ spec:
     spec:
       containers:
       - name: pods-api
-        image: anujpatel800/k8s-pods-status:latest
+        image: anujpatel800/k8s-pods-status:only-status
+        #image: anujpatel800/k8s-pods-status:latest
         imagePullPolicy: Always
         env:
         - name: X_NAMESPACE
