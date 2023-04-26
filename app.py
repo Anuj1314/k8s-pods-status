@@ -55,7 +55,7 @@ def hello():
         list_of_dictionaries.append(my_dict)
     return (list_of_dictionaries)
 
-@app.route('/pods/reboot/<deployment_name>', methods=['POST'])
+@app.route('/v1/pods/reboot/<deployment_name>')
 def restart_deployment(deployment_name):
     config.load_incluster_config()
     k8s_client = client.AppsV1Api()
@@ -64,8 +64,8 @@ def restart_deployment(deployment_name):
     deployment = k8s_client.read_namespaced_deployment(deployment_name,os.environ.get("X_NAMESPACE"))
 
     # Increment the deployment's revision to trigger a rollout restart
-    deployment.spec.template.metadata.annotations['kubectl.kubernetes.io/restartedAt'] = str(datetime.datetime.utcnow())
-    deployment.spec.template.metadata.labels['date'] = str(datetime.datetime.utcnow())
+    deployment.spec.template.metadata.annotations['kubectl.kubernetes.io/restartedAt'] = str(datetime.utcnow())
+    deployment.spec.template.metadata.labels['date'] = str(datetime.utcnow())
 
     # Update the deployment
     k8s_client.patch_namespaced_deployment(
