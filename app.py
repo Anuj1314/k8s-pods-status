@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,jsonify
 from kubernetes import client, config
 from datetime import datetime,timezone
 import os
@@ -54,6 +54,31 @@ def hello():
         my_dict['uptime'] = i[5]
         list_of_dictionaries.append(my_dict)
     return (list_of_dictionaries)
+
+@app.route('/pods/reboot/<deployment_name>', methods=['POST'])
+def restart_deployment(deployment_name):
+    config.load_incluster_config()
+    k8s_client = client.AppsV1Api()
+
+    # Get the deployment object
+    deployment = k8s_client.read_namespaced_deployment(deployment_name,os.environ.get("X_NAMESPACE"))
+
+    # Increment the deployment's revision to trigger a rollout restart
+    deployment.spec.template.metadata.annotations['kubectl.kubernetes.io/restartedAt'] = str(datetime.datetime.utcnow())
+    deployment.spec.template.metadata.labels['date'] = str(datetime.datetime.utcnow())
+
+    # Update the deployment
+    k8s_client.patch_namespaced_deployment(
+        deployment_name,
+        namespace,
+        deployment
+    )
+
+    return jsonify({'message': f'Deployment {deployment_name} in namespace {namespace} restarted'})
+
+
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
