@@ -74,7 +74,7 @@ def restart_deployment(deployment_name):
         deployment
     )
 
-    return jsonify({'message': f'Deployment {deployment_name} in namespace {namespace} restarted'})
+    return jsonify({'message': f'Deployment {deployment_name} is restarted'})
 
 
 
