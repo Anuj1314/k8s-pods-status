@@ -23,6 +23,13 @@ rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get","scale", "update", "patch"]
+- apiGroups: ["apps"]
+  resources: ["deployments/finalizers"]
+  verbs: ["get","update"]
+
 
 ---
 apiVersion: v1
