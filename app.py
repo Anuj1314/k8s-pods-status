@@ -70,7 +70,7 @@ def restart_deployment(deployment_name):
     # Update the deployment
     k8s_client.patch_namespaced_deployment(
         deployment_name,
-        namespace,
+        os.environ.get("X_NAMESPACE"),
         deployment
     )
 
